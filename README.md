@@ -1,4 +1,4 @@
-# Bloqbit Eggs
+# <img src="icon.ico" width="25" alt="Logo" /> Bloqbit Eggs
 Need it? Got it. This is the repository where you can find official eggs to deploy Bloqbit on your favorite server panel.
 
 ---
