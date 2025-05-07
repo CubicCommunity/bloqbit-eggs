@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-04-28T07:31:06+08:00",
+    "exported_at": "2025-05-07T10:31:47+08:00",
     "name": "Bloqbit Pterodactyl Server",
     "author": "bloqbit@cubicstudios.xyz",
     "description": "Need it? Got it. This is the official node.js Pterodactyl egg to install and run Bloqbit.",
@@ -34,7 +34,7 @@
             "name": "Auto-Update",
             "description": "Pull the latest files from Bloqbit's repository on startup.",
             "env_variable": "AUTO_UPDATE",
-            "default_value": "0",
+            "default_value": "1",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|boolean",
@@ -67,7 +67,7 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:32",
+            "rules": "nullable|string|max:32",
             "field_type": "text"
         },
         {
@@ -87,7 +87,7 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|min:16",
+            "rules": "required|string|regex:\/^mongodb(\\+srv)?:\\\/\\\/[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+)?@[a-zA-Z0-9._-]+(:\\d+)?\\\/?\/",
             "field_type": "text"
         },
         {
