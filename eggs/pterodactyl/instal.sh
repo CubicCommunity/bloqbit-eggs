@@ -6,7 +6,7 @@
 
 # Constants
 GIT_ADDRESS="https://github.com/CubicCommunity/Bloqbit.git"
-SERVER_DIR="/mnt/server"
+SERVER_DIR="$PWD"
 
 # Update and install required dependencies
 install_dependencies() {
