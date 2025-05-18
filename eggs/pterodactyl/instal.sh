@@ -10,9 +10,13 @@ SERVER_DIR="/mnt/server"
 
 # Update and install required dependencies
 install_dependencies() {
+    echo "Cleaning packages..."
+
+    apt-get autoremove -y && apt-get clean && apt-get autoclean
+
     echo "Updating system and installing dependencies..."
-    apt update && apt install -y \
-        git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool
+
+    apt update && apt install -y git
 
     if ! command -v git &>/dev/null; then
         echo "git could not be installed or is not in PATH."
