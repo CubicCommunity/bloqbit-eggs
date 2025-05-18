@@ -6,13 +6,18 @@
 
 # Constants
 GIT_ADDRESS="https://github.com/CubicCommunity/Bloqbit.git"
-SERVER_DIR="$PWD"
+SERVER_DIR="/mnt/server"
 
 # Update and install required dependencies
 install_dependencies() {
     echo "Updating system and installing dependencies..."
     apt update && apt install -y \
         git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool
+
+    if ! command -v git &>/dev/null; then
+        echo "git could not be installed or is not in PATH."
+        exit 1
+    fi
 }
 
 # Update npm to the latest version
