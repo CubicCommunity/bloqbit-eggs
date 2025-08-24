@@ -4,16 +4,16 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-05-18T11:18:00+08:00",
+    "exported_at": "2025-08-25T04:44:01+08:00",
     "name": "Bloqbit Pterodactyl Server",
     "author": "bloqbit@cubicstudios.xyz",
     "description": "Need it? Got it. This is the official node.js Pterodactyl egg to install and run Bloqbit.",
     "features": null,
     "docker_images": {
-        "node.js 21": "ghcr.io\/parkervcp\/yolks:nodejs_21",
-        "node.js 22": "ghcr.io\/parkervcp\/yolks:nodejs_22",
-        "node.js 23": "ghcr.io\/parkervcp\/yolks:nodejs_23",
-        "node.js 24": "ghcr.io\/parkervcp\/yolks:nodejs_24"
+        "Node.js 21": "ghcr.io\/parkervcp\/yolks:nodejs_21",
+        "Node.js 22": "ghcr.io\/parkervcp\/yolks:nodejs_22",
+        "Node.js 23": "ghcr.io\/parkervcp\/yolks:nodejs_23",
+        "Node.js 24": "ghcr.io\/parkervcp\/yolks:nodejs_24"
     },
     "file_denylist": [],
     "startup": "if [[ -d .git ]] && [[ ${AUTO_UPDATE} == \"1\" ]]; then git pull; fi;\r\nif [ -f \/home\/container\/package.json ]; then \r\n    \/usr\/local\/bin\/npm install; \r\nfi;\r\n\/usr\/local\/bin\/npm start;",
@@ -25,7 +25,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# Bloqbit Installation Script\r\n# Server Files: \/mnt\/server\r\n\r\n# Inherited from node.js generic egg https:\/\/www.pterodactyleggs.com\/egg\/673601c24924a4e9bbd4bed3\/\r\n\r\n# Constants\r\nGIT_ADDRESS=\"https:\/\/github.com\/CubicCommunity\/Bloqbit.git\"\r\nSERVER_DIR=\"\/mnt\/server\"\r\n\r\n# Update and install required dependencies\r\ninstall_dependencies() {\r\n    echo \"Cleaning packages...\"\r\n\r\n    apt-get autoremove -y && apt-get clean && apt-get autoclean\r\n\r\n    echo \"Updating system and installing dependencies...\"\r\n\r\n    apt update && apt install -y git\r\n\r\n    if ! command -v git &>\/dev\/null; then\r\n        echo \"git could not be installed or is not in PATH.\"\r\n        exit 1\r\n    fi\r\n}\r\n\r\n# Update npm to the latest version\r\nupdate_npm() {\r\n    echo \"Updating npm to the latest version...\"\r\n\r\n    npm install -g npm@latest\r\n\r\n    npm install --save-dev typescript\r\n    npm install --save-dev rimraf\r\n}\r\n\r\n# Clone or pull the repository\r\nmanage_repository() {\r\n    echo \"Checking server directory: $SERVER_DIR\"\r\n    mkdir -p \"$SERVER_DIR\"\r\n    cd \"$SERVER_DIR\"\r\n\r\n    if [ \"$(ls -A \"$SERVER_DIR\")\" ]; then\r\n        echo \"$SERVER_DIR is not empty.\"\r\n        if [ -d .git ]; then\r\n            echo \".git directory exists.\"\r\n            if [ -f .git\/config ]; then\r\n                echo \"Loading info from git config...\"\r\n                ORIGIN=$(git config --get remote.origin.url)\r\n            else\r\n                echo \"Files found with no git config. Exiting to avoid breaking anything.\"\r\n                exit 10\r\n            fi\r\n        fi\r\n\r\n        if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n            echo \"Pulling latest Bloqbit public update...\"\r\n            git pull\r\n        fi\r\n    else\r\n        echo \"$SERVER_DIR is empty. Cloning repository...\"\r\n        if [ -z \"${BRANCH}\" ]; then\r\n            echo \"Cloning public Bloqbit branch...\"\r\n            git clone \"${GIT_ADDRESS}\" .\r\n        else\r\n            echo \"Cloning branch: ${BRANCH}...\"\r\n            git clone --single-branch --branch \"${BRANCH}\" \"${GIT_ADDRESS}\" .\r\n        fi\r\n    fi\r\n}\r\n\r\n# Install Node.js dependencies\r\ninstall_dependencies_node() {\r\n    if [ -f \"$SERVER_DIR\/package.json\" ]; then\r\n        echo \"Installing Node.js dependencies...\"\r\n        npm install --production\r\n    else\r\n        echo \"No package.json found. Skipping npm install.\"\r\n    fi\r\n}\r\n\r\n# Main script execution\r\nmain() {\r\n    install_dependencies\r\n    update_npm\r\n    manage_repository\r\n    install_dependencies_node\r\n    echo \"Installation complete!\"\r\n    exit 0\r\n}\r\n\r\n# Execute the main function\r\nmain\r\n\r\n# End of script",
+            "script": "#!\/bin\/bash\r\n# Bloqbit Installation Script\r\n# Server Files: \/mnt\/server\r\n\r\n# Inherited from node.js generic egg https:\/\/www.pterodactyleggs.com\/egg\/673601c24924a4e9bbd4bed3\/\r\n\r\n# Constants\r\nGIT_ADDRESS=\"https:\/\/github.com\/CubicCommunity\/Bloqbit.git\"\r\nSERVER_DIR=\"\/mnt\/server\"\r\n\r\n# Update and install required dependencies\r\ninstall_dependencies() {\r\n    echo \"Cleaning packages...\"\r\n\r\n    apt-get autoremove -y && apt-get clean && apt-get autoclean\r\n\r\n    echo \"Updating system and installing dependencies...\"\r\n\r\n    apt update && apt install -y git\r\n\r\n    if ! command -v git &>\/dev\/null; then\r\n        echo \"git could not be installed or is not in PATH.\"\r\n        exit 1\r\n    fi\r\n}\r\n\r\n# Update npm to the latest version\r\nupdate_npm() {\r\n    echo \"Updating npm to the latest version...\"\r\n    npm i -g npm@latest\r\n}\r\n\r\n# Clone or pull the repository\r\nmanage_repository() {\r\n    echo \"Checking server directory: $SERVER_DIR\"\r\n    mkdir -p \"$SERVER_DIR\"\r\n    cd \"$SERVER_DIR\"\r\n\r\n    if [ \"$(ls -A \"$SERVER_DIR\")\" ]; then\r\n        echo \"$SERVER_DIR is not empty.\"\r\n        if [ -d .git ]; then\r\n            echo \".git directory exists.\"\r\n            if [ -f .git\/config ]; then\r\n                echo \"Loading info from git config...\"\r\n                ORIGIN=$(git config --get remote.origin.url)\r\n            else\r\n                echo \"Files found with no git config. Exiting to avoid breaking anything.\"\r\n                exit 10\r\n            fi\r\n        fi\r\n\r\n        if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n            echo \"Forcing latest Bloqbit public update (discarding local changes)...\"\r\n            git fetch --all\r\n\r\n            # Detect branch name\r\n            BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)\r\n            git reset --hard \"origin\/${BRANCH_NAME}\"\r\n        fi\r\n    else\r\n        echo \"$SERVER_DIR is empty. Cloning repository...\"\r\n        if [ -z \"${BRANCH}\" ]; then\r\n            echo \"Cloning public Bloqbit branch...\"\r\n            git clone \"${GIT_ADDRESS}\" .\r\n        else\r\n            echo \"Cloning branch: ${BRANCH}...\"\r\n            git clone --single-branch --branch \"${BRANCH}\" \"${GIT_ADDRESS}\" .\r\n        fi\r\n    fi\r\n}\r\n\r\n# Install Node.js dependencies\r\ninstall_dependencies_node() {\r\n    if [ -f \"$SERVER_DIR\/package.json\" ]; then\r\n        echo \"Installing Node.js dependencies...\"\r\n        npm install --production\r\n    else\r\n        echo \"No package.json found. Skipping npm install.\"\r\n    fi\r\n}\r\n\r\n# Main script execution\r\nmain() {\r\n    install_dependencies\r\n    update_npm\r\n    manage_repository\r\n    install_dependencies_node\r\n\r\n    echo \"\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\"\r\n    echo \"Bloqbit is now installed!\"\r\n    echo \"\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\"\r\n\r\n    exit 0\r\n}\r\n\r\n# Execute the main function\r\nmain\r\n\r\n# End of script",
             "container": "node:24-bookworm-slim",
             "entrypoint": "bash"
         }
@@ -33,7 +33,7 @@
     "variables": [
         {
             "name": "Auto-Update",
-            "description": "Pull the latest files from Bloqbit's repository on startup.",
+            "description": "Pull the latest commit from Bloqbit's public repository on startup.",
             "env_variable": "AUTO_UPDATE",
             "default_value": "1",
             "user_viewable": true,
@@ -49,6 +49,26 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Run Release Version",
+            "description": "Use a stable release branch of Bloqbit.",
+            "env_variable": "USE_RELEASE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Run Shards",
+            "description": "Create multiple instances of Bloqbit at startup to handle activity across over hundreds of servers.",
+            "env_variable": "USE_SHARDS",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
             "field_type": "text"
         },
         {
@@ -82,23 +102,53 @@
             "field_type": "text"
         },
         {
-            "name": "MongoDB URI",
-            "description": "URI to access your MongoDB database.",
-            "env_variable": "MONGO_URI",
-            "default_value": "",
+            "name": "Database Host",
+            "description": "Host IP address of the database.",
+            "env_variable": "DB_HOST",
+            "default_value": "0.0.0.0",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|regex:\/^mongodb(\\+srv)?:\\\/\\\/[a-zA-Z0-9._%-]+(:[a-zA-Z0-9._%-]+)?@[a-zA-Z0-9._-]+(\\.[a-zA-Z0-9._-]+)*(:\\d+)?\\\/?\/",
+            "rules": "required|ip",
             "field_type": "text"
         },
         {
-            "name": "Groq AI Token",
-            "description": "Groqcloud API token.",
-            "env_variable": "AI_TOKEN",
-            "default_value": "",
+            "name": "Database Port",
+            "description": "Port of the database host.",
+            "env_variable": "DB_PORT",
+            "default_value": "3000",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:56",
+            "rules": "required|integer|min:1|max:65535",
+            "field_type": "text"
+        },
+        {
+            "name": "Database User",
+            "description": "",
+            "env_variable": "DB_USERNAME",
+            "default_value": "admin",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Database Password",
+            "description": "Password to authorize into the database with.",
+            "env_variable": "DB_PASSWORD",
+            "default_value": "admin",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Database Name",
+            "description": "Name of the database the data will be stored in.",
+            "env_variable": "DB_DATABASE",
+            "default_value": "bloqbit",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
             "field_type": "text"
         }
     ]
