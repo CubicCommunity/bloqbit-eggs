@@ -27,11 +27,7 @@ install_dependencies() {
 # Update npm to the latest version
 update_npm() {
     echo "Updating npm to the latest version..."
-
-    npm install -g npm@latest
-
-    npm install --save-dev typescript
-    npm install --save-dev rimraf
+    npm i -g npm@latest
 }
 
 # Clone or pull the repository
@@ -54,8 +50,12 @@ manage_repository() {
         fi
 
         if [ "${ORIGIN}" == "${GIT_ADDRESS}" ]; then
-            echo "Pulling latest Bloqbit public update..."
-            git pull
+            echo "Forcing latest Bloqbit public update (discarding local changes)..."
+            git fetch --all
+
+            # Detect branch name
+            BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+            git reset --hard "origin/${BRANCH_NAME}"
         fi
     else
         echo "$SERVER_DIR is empty. Cloning repository..."
@@ -85,7 +85,11 @@ main() {
     update_npm
     manage_repository
     install_dependencies_node
-    echo "Installation complete!"
+
+    echo "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+    echo "Bloqbit is now installed!"
+    echo "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+
     exit 0
 }
 
