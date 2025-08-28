@@ -2,7 +2,7 @@
 # Bloqbit Installation Script
 # Server Files: /mnt/server
 
-# Inherited from node.js generic egg https://www.pterodactyleggs.com/egg/673601c24924a4e9bbd4bed3/
+# Derived from node.js generic egg https://www.pterodactyleggs.com/egg/673601c24924a4e9bbd4bed3/
 
 # Constants
 GIT_ADDRESS="https://github.com/CubicCommunity/Bloqbit.git"
@@ -33,13 +33,32 @@ update_npm() {
 # Clone or pull the repository
 manage_repository() {
     echo "Checking server directory: $SERVER_DIR"
+
     mkdir -p "$SERVER_DIR"
-    cd "$SERVER_DIR"
+    cd "$SERVER_DIR" || exit 1
+
+    # Determine branch or release tag
+    if [ "$USE_RELEASE" = true ]; then
+        echo "Detecting latest release tag from remote..."
+        BRANCH=$(git ls-remote --tags --sort=-v:refname "$GIT_ADDRESS" | \
+                 grep -o 'refs/tags/[^\^]*' | \
+                 sed 's/refs\/tags\///' | \
+                 head -n 1)
+
+        if [ -z "$BRANCH" ]; then
+            echo "No release tags found. Exiting..."
+            exit 11
+        fi
+
+        echo "Latest release tag detected: $BRANCH"
+    fi
 
     if [ "$(ls -A "$SERVER_DIR")" ]; then
         echo "$SERVER_DIR is not empty."
+
         if [ -d .git ]; then
             echo ".git directory exists."
+
             if [ -f .git/config ]; then
                 echo "Loading info from git config..."
                 ORIGIN=$(git config --get remote.origin.url)
@@ -50,20 +69,28 @@ manage_repository() {
         fi
 
         if [ "${ORIGIN}" == "${GIT_ADDRESS}" ]; then
-            echo "Forcing latest Bloqbit public update (discarding local changes)..."
+            echo "Forcing latest update from origin (discarding local changes)..."
             git fetch --all
 
-            # Detect branch name
+            # Detect current branch or tag
             BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-            git reset --hard "origin/${BRANCH_NAME}"
+
+            if [ "$BRANCH_NAME" = "HEAD" ]; then
+                echo "Detached HEAD detected. Resetting to latest tag: $BRANCH"
+                git reset --hard "tags/${BRANCH}"
+            else
+                echo "Resetting to origin/${BRANCH_NAME}"
+                git reset --hard "origin/${BRANCH_NAME}"
+            fi
         fi
     else
         echo "$SERVER_DIR is empty. Cloning repository..."
+
         if [ -z "${BRANCH}" ]; then
-            echo "Cloning public Bloqbit branch..."
+            echo "Cloning default branch..."
             git clone "${GIT_ADDRESS}" .
         else
-            echo "Cloning branch: ${BRANCH}..."
+            echo "Cloning branch or tag: ${BRANCH}..."
             git clone --single-branch --branch "${BRANCH}" "${GIT_ADDRESS}" .
         fi
     fi
