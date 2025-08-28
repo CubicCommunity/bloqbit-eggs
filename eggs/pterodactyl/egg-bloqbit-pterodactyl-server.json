@@ -16,7 +16,7 @@
         "Node.js 24": "ghcr.io\/parkervcp\/yolks:nodejs_24"
     },
     "file_denylist": [],
-    "startup": "if [[ -d .git ]] && [[ \"${UPDATE}\" == \"true\" ]]; then git pull; fi;\r\nif [ -f \/home\/container\/package.json ]; then \r\n    \/usr\/local\/bin\/npm install; \r\nfi;\r\n\/usr\/local\/bin\/npm start;",
+    "startup": "if [[ -d .git ]] && [[ ${AUTO_UPDATE} == \"1\" ]]; then git pull; fi;\r\nif [ -f \/home\/container\/package.json ]; then \/usr\/local\/bin\/npm install; fi;\r\n\/usr\/local\/bin\/npm start;",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": [\r\n        \" is online\",\r\n        \" is ready\",\r\n        \" is running\"\r\n    ]\r\n}",
@@ -44,7 +44,7 @@
         {
             "name": "Always Update",
             "description": "Pull the latest commit from Bloqbit's public repository on startup.",
-            "env_variable": "UPDATE",
+            "env_variable": "AUTO_UPDATE",
             "default_value": "true",
             "user_viewable": true,
             "user_editable": true,
