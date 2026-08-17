@@ -13,7 +13,9 @@
         "Node.js 21": "ghcr.io\/parkervcp\/yolks:nodejs_21",
         "Node.js 22": "ghcr.io\/parkervcp\/yolks:nodejs_22",
         "Node.js 23": "ghcr.io\/parkervcp\/yolks:nodejs_23",
-        "Node.js 24": "ghcr.io\/parkervcp\/yolks:nodejs_24"
+        "Node.js 24": "ghcr.io\/parkervcp\/yolks:nodejs_24",
+        "Node.js 25": "ghcr.io\/parkervcp\/yolks:nodejs_25",
+        "Node.js 26": "ghcr.io\/parkervcp\/yolks:nodejs_26"
     },
     "file_denylist": [],
     "startup": "if [[ -d .git ]] && [[ ${AUTO_UPDATE} == \"1\" ]]; then git pull; fi;\r\nif [ -f \/home\/container\/package.json ]; then \/usr\/local\/bin\/npm install; fi;\r\n\/usr\/local\/bin\/npm start;",
